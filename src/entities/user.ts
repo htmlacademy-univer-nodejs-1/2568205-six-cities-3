@@ -7,3 +7,13 @@ export type User = {
     password: string,
     type: UserType
 }
+export function isUser(obj: any): obj is User {
+  return (
+    typeof obj.name === 'string'  &&
+    typeof obj.email === 'string'  &&
+    typeof obj.avatar === 'string'   &&
+    typeof obj.password === 'string'
+    //['Basic', 'Pro'].includes(obj.type)
+);
+}
+
