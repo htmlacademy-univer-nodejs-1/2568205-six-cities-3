@@ -9,7 +9,7 @@ export class GenerateCommand implements Command {
     return "--generate"
   }
   async execute(...args: string[]): Promise<void> {
-   const [count, filepath, url] = args
+    const [count, filepath, url] = args
     var offersCount = Number.parseInt(count, 10)
     let mockData = await axios.get<MockData>(url)
     //console.log(mockData.data)
