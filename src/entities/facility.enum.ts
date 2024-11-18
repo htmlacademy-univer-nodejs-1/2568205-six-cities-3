@@ -1,9 +1,9 @@
 export enum Facility {
-  Breakfast,
-  AirConditioning,
-  LaptopFrendlyWorkspace,
-  BabySeat,
-  Washer,
-  Towels,
-  Frige
+  Breakfast = "Breakfast",
+  AirConditioning = "AirConditioning",
+  LaptopFrendlyWorkspace = "LaptopFrendlyWorkspace",
+  BabySeat = "BabySeat",
+  Washer = "Washer",
+  Towels = "Towels",
+  Fridge = "Fridge"
 }
