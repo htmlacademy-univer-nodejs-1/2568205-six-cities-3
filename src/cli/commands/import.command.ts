@@ -39,14 +39,15 @@ export class ImportCommand implements Command {
     this.databaseClient = new MongoDatabaseClient(this.logger);
   }
 
-  private async onImportedLine(line: string) {
+  private async onImportedLine(line: string, resolve: ()=>void) {
     const offer = createOffer(line);
     await this.saveOffer(offer);
+    resolve()
   }
 
   private async onCompleteImport(count: number) {
     console.info(`${count} rows imported.`);
-    //await this.databaseClient.disconnect()
+    this.databaseClient.disconnect()
 
   }
 
