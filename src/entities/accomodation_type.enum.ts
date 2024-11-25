@@ -1,6 +1,6 @@
 export enum AccomodationType {
-    appartment,
-    house,
-    room,
-    hotel
+  appartment,
+  house,
+  room,
+  hotel
 }

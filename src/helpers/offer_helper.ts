@@ -7,25 +7,25 @@ import { UserType } from '../entities/user_type.enum.js';
 
 export function createOffer(offerData: string): Offer {
   const [
-  name,
-  description,
-  publicationDate,
-  city,
-  previewUrl,
-  photoUrls,
-  isPremium,
-  isFavourite,
-  rating,
-  accomodationType,
-  roomsCount,
-  guestsCount,
-  salary,
-  facility,
-  username,
-  email,
-  password,
-  avatar,
-  userType
+    name,
+    description,
+    publicationDate,
+    city,
+    previewUrl,
+    photoUrls,
+    isPremium,
+    isFavourite,
+    rating,
+    accomodationType,
+    roomsCount,
+    guestsCount,
+    salary,
+    facility,
+    username,
+    email,
+    password,
+    avatar,
+    userType
   ] = offerData.replace('\n', '').split('\t');
 
   const user = {
@@ -54,9 +54,9 @@ export function createOffer(offerData: string): Offer {
     user: {
       name: username,
       password,
-       email,
-        avatar,
-          type: userType as unknown as UserType
-      }
+      email,
+      avatar,
+      type: userType as unknown as UserType
+    }
   };
 }
