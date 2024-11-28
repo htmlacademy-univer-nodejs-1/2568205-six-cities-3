@@ -1,0 +1,340 @@
+openapi: 3.0.0
+info:
+  title: API-сервер для проекта "Шесть городов"
+  version: "1.0.0"
+tags:
+  - name: offers
+    description: Контроллер объявлений
+  - name: comments
+    description: Контроллер комментариев
+  - name: users
+    description: Контроллер пользователей
+paths:
+  /users/register:
+    post:
+      summary: Регистрация пользователя
+      tags: [ 'users' ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createUser'
+      responses:
+        '200':
+          description: Пользователь создан.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+  /users/login:
+    post:
+      tags: [ 'users' ]
+      responses:
+        '200':
+          description: Пользователь успешно авторизован
+        '400':
+          description: Указаны неверные данные.
+  /offers:
+    get:
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+      tags: [ 'offers' ]
+      responses:
+        '200':
+          description: Все предложения
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offers'
+  /offers/{id}:
+    get:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Предложение
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+      tags: [ 'offers' ]
+    put:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/offer'
+      responses:
+        '200':
+          description: Предложение
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+      tags: [ 'offers' ]
+    delete:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      tags: [ 'offers' ]
+      responses:
+        '200':
+          description: Предложение
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+
+
+  /offers/:
+    post:
+      tags: ['offers']
+      requestBody:
+        content:
+         application/json:
+          schema:
+           $ref: '#/components/schemas/offer'
+      responses:
+        '200':
+          description: Все предложения
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+  /offers/favourites/add:
+      post:
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+
+        tags: ['offers']
+        responses:
+          '200':
+            description: Предложение
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/offer'
+          '400':
+           description: Id невалиден или попытка добавить в избранное чужое
+  /comments/add:
+    post:
+      tags: [ 'comments' ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/commentAdd'
+      responses:
+        '200':
+          description: Добавление комментария
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/comment'
+  /comments:
+    get:
+      parameters:
+        - name: offerId
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Все комментарии
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/comments'
+  /comments/{id}:
+    delete:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Удаление комментария
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/comment'
+  /comments/rating:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/commentsChangeRating'
+      responses:
+          '200':
+            description: Добавление комментария
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/comment'
+components:
+  schemas:
+    offers:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 94312456
+          name:
+            type: string
+            example: "House"
+          isFavourite:
+            type: boolean
+            example: true
+          date:
+            type: string
+            example: "2015-03-25T12:00:00Z"
+          city:
+            type: string
+            example: Hamburg
+          photo:
+            type: string
+            example: https://avatars.mds.yandex.net/i?id=fc3eec7ca8db8591e4519db157f92b19_l-7012560-images-thumbs&n=13
+          rating:
+            type: number
+            example: 4.1
+          accomodationType:
+            type: string
+            example: House
+          cost:
+            type: integer
+            example: 2000
+          commentsCount:
+            type: integer
+            example: 5
+    offer:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 94312456
+        name:
+          type: string
+          example: "House"
+        isFavourite:
+          type: boolean
+          example: true
+        date:
+          type: string
+          example: "2015-03-25T12:00:00Z"
+        city:
+          type: string
+          example: Hamburg
+        photo:
+          type: string
+          example: https://avatars.mds.yandex.net/i?id=fc3eec7ca8db8591e4519db157f92b19_l-7012560-images-thumbs&n=13
+        rating:
+          type: number
+          example: 4.1
+        accomodationType:
+          type: string
+          example: House
+        cost:
+          type: integer
+          example: 2000
+        commentsCount:
+          type: integer
+          example: 5
+        photoUrls:
+          type: array
+          items:
+            type: string
+            example: https://avatars.mds.yandex.net/i?id=fc3eec7ca8db8591e4519db157f92b19_l-7012560-images-thumbs&n=13
+        roomsCount:
+          type: integer
+          example: 5
+        guestsCount:
+          type: integer
+        facility:
+          type: string
+          example: Washer
+        userId:
+          type: string
+          example: "8ba34b8b-b358-4f7b-af8b-9b4159ca5ade"
+    commentAdd:
+      type: object
+      properties:
+        text:
+          type: string
+          example: Loren ipsum
+    comment:
+      type: object
+      properties:
+        text:
+          type: string
+          example: Loren ipsum
+        date:
+          type: string
+          example: 2015-03-25T12:00:00Z
+        rating:
+          type: number
+          example: 3
+        userId:
+          type: string
+          example: 8ba34b8b-b358-4f7b-af8b-9b4159ca5ade
+    comments:
+      type: array
+      items:
+        $ref: '#/components/schemas/comment'
+    commentsChangeRating:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 8ba34b8b-b358-4f7b-af8b-9b4159ca5ade
+        newRating:
+          type: number
+          example: 4.5
+    createUser:
+      type: object
+      properties:
+        email:
+          type: string
+          example: keks@htmlacademy.ru
+        username:
+          type: string
+          example: Keks
+        lastname:
+          type: string
+          example: Cat
+        password:
+          type: string
+          example: 123456
+    user:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 8ba34b8b-b358-4f7b-af8b-9b4159ca5ade
+        email:
+          type: string
+          example: keks@htmlacademy.ru
+
