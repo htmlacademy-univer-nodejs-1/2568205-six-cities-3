@@ -6,7 +6,7 @@ import { injectable, inject } from 'inversify';
 import { Component } from '../entities/component.js';
 import { DatabaseClient } from '../modules/db/database_client.interface.js';
 import { getMongoURI } from '../helpers/database.js';
-import { UserModel } from '../entities/user.entity.js';
+import { UserModel } from '../entities/user/user.entity.js';
 @injectable()
 export class RestApplication {
   constructor(

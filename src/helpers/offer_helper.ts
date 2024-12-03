@@ -1,8 +1,8 @@
 import { AccomodationType } from '../entities/accomodation_type.enum.js';
 import { City } from '../entities/city.enum.js';
 import { Facility } from '../entities/facility.enum.js';
-import { Offer } from '../entities/offer.js';
-import { UserType } from '../entities/user_type.enum.js';
+import { Offer } from '../entities/offer/offer.js';
+import { UserType } from '../entities/user/user_type.enum.js';
 
 
 export function createOffer(offerData: string): Offer {

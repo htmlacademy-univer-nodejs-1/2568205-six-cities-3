@@ -1,6 +1,6 @@
 import { defaultClasses, getModelForClass, prop, modelOptions } from '@typegoose/typegoose';
-import { User } from './user.js';
-import { createSHA256 } from '../helpers/database.js';
+import { User } from '../user.js';
+import { createSHA256 } from '../../helpers/database.js';
 import { UserType } from './user_type.enum.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging

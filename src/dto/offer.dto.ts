@@ -1,7 +1,7 @@
 import { AccomodationType } from "../entities/accomodation_type.enum.js";
 import { City } from "../entities/city.enum.js";
 import { Facility } from "../entities/facility.enum.js";
-export class CreateOfferDto {
+export class OfferDto {
   constructor(
     public name: string,
     public description: string,

@@ -1,7 +1,7 @@
-import { AccomodationType } from "./accomodation_type.enum.js"
-import { City } from "./city.enum.js"
-import { Facility } from "./facility.enum.js"
-import { User } from "./user.js"
+import { AccomodationType } from "../accomodation_type.enum.js"
+import { City } from "../city.enum.js"
+import { Facility } from "../facility.enum.js"
+import { User } from "../user.js"
 
 export type Offer = {
   name: string,
