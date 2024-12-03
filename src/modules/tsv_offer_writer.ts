@@ -1,6 +1,6 @@
-import { Offer } from "../entities/offer.js"
+import { Offer } from "../entities/offer/offer.js"
 import { User, isUser } from "../entities/user.js";
-import { UserType } from "../entities/user_type.enum.js";
+import { UserType } from "../entities/user/user_type.enum.js";
 import { TSVFileWriter } from "../helpers/file_writer.js";
 export class TsvOfferWriter {
   private filePath: string;

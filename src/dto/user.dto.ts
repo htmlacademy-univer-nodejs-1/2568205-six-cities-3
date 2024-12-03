@@ -1,4 +1,4 @@
-import { UserType } from "../entities/user_type.enum.js";
+import { UserType } from "../entities/user/user_type.enum.js";
 
 export class CreateUserDto {
   public email: string;

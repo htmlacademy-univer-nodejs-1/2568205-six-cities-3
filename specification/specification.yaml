@@ -164,10 +164,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/comments'
-  /comments/{id}:
+  /comments/{offer_id}:
     delete:
       parameters:
-        - name: id
+        - name: offer_id
           in: path
           required: true
           schema:

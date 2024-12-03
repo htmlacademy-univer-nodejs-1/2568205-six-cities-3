@@ -1,13 +1,13 @@
 
 import dayjs from 'dayjs';
-import { Offer } from "../entities/offer.js"
+import { Offer } from "../entities/offer/offer.js"
 import { Generator } from "./generator.interface.js"
 import { MockData } from "../helpers/mock_data_type.js"
 import { generateRandomValue, getRandomItem, getRandomItems, getRandomEnumValue } from '../helpers/index.js';
 import { City } from "../entities/city.enum.js";
 import { Facility } from '../entities/facility.enum.js';
 import { AccomodationType } from '../entities/accomodation_type.enum.js';
-import { UserType } from '../entities/user_type.enum.js';
+import { UserType } from '../entities/user/user_type.enum.js';
 export class OfferGenerator implements Generator<Offer> {
   private mockData: MockData
   private offersCount: number

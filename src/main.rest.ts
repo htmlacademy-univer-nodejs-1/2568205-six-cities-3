@@ -13,8 +13,8 @@ import { DefaultOfferService } from './service/default_offer.service.js';
 import { UserService } from './service/user.service.interface.js';
 import { DefaultUserService } from './service/default_user.service.js';
 import { types } from '@typegoose/typegoose';
-import { OfferEntity, OfferModel } from './entities/offer.entity.js';
-import { UserEntity, UserModel } from './entities/user.entity.js';
+import { OfferEntity, OfferModel } from './entities/offer/offer.entity.js';
+import { UserEntity, UserModel } from './entities/user/user.entity.js';
 
 async function bootstrap() {
 
