@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import * as Mongoose from 'mongoose';
 import { inject, injectable } from 'inversify';
 import { DatabaseClient } from './database_client.interface.js';

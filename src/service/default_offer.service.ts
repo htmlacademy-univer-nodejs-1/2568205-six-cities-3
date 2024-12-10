@@ -51,7 +51,7 @@ export class DefaultOfferService implements OfferService {
  public async calculateRating(id: string, oldRating: number, newRating: number, ratingCount: number) {
   this.offerModel.findByIdAndUpdate(id, {'rating': (oldRating+newRating)/ratingCount})
  }
- public async find(limit: number): Promise<DocumentType<OfferEntity>[]> {
+ public async findAll(limit: number): Promise<DocumentType<OfferEntity>[]> {
   return this.offerModel
     .aggregate([
       {
