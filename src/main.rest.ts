@@ -15,21 +15,22 @@ import { DefaultUserService } from './service/default_user.service.js';
 import { types } from '@typegoose/typegoose';
 import { OfferEntity, OfferModel } from './entities/offer/offer.entity.js';
 import { UserEntity, UserModel } from './entities/user/user.entity.js';
+import { createRestApplicationContainer } from './rest/rest.container.js';
+import { createUserContainer } from './entities/user/user.container.js';
+import { createOfferContainer } from './entities/offer/offer.container.js';
+import { createCommentContainer } from './entities/comment/comment.container.js';
 
 async function bootstrap() {
 
-  const container = new Container();
-  container.bind<RestApplication>(Component.RestApplication).to(RestApplication).inSingletonScope();
-  container.bind<Logger>(Component.Logger).to(PinoLogger).inSingletonScope();
-  container.bind<Config<RestSchema>>(Component.Config).to(RestConfig).inSingletonScope();
-  container.bind<DatabaseClient>(Component.DatabaseClient).to(MongoDatabaseClient).inSingletonScope();
-  container.bind<OfferService>(Component.OfferService).to(DefaultOfferService).inSingletonScope();
-  container.bind<UserService>(Component.UserService).to(DefaultUserService).inSingletonScope();
-  container.bind<types.ModelType<OfferEntity>>(Component.OfferModel).toConstantValue(OfferModel);
-  container.bind<types.ModelType<UserEntity>>(Component.UserModel).toConstantValue(UserModel);
+  const appContainer = Container.merge(
+    createRestApplicationContainer(),
+    createUserContainer(),
+    createOfferContainer(),
+    createCommentContainer(),
+  );
 
 
-  const application = container.get<RestApplication>(Component.RestApplication);
+  const application = appContainer.get<RestApplication>(Component.RestApplication);
   await application.init();
 }
 

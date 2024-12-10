@@ -1,6 +1,6 @@
 import { UserType } from "../entities/user/user_type.enum.js";
 
-export class CreateUserDto {
+export class UserDto {
   public email: string;
   public avatar: string;
   public name: string;

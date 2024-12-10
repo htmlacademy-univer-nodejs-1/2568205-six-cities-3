@@ -1,7 +1,7 @@
 import { UserService } from './user.service.interface.js';
 import { DocumentType, types } from '@typegoose/typegoose';
 import { UserEntity } from '../entities/user/user.entity.js';
-import { CreateUserDto } from '../dto/user.dto.js';
+import { UserDto } from '../dto/user.dto.js';
 import { inject, injectable } from 'inversify';
 import { Component } from '../entities/component.js';
 import { Logger } from '../modules/logger/logger.interface.js';
@@ -13,7 +13,7 @@ export class DefaultUserService implements UserService {
     @inject(Component.UserModel) private readonly userModel: types.ModelType<UserEntity>
   ) {}
 
-  public async create(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>> {
+  public async create(dto: UserDto, salt: string): Promise<DocumentType<UserEntity>> {
     const user = new UserEntity(dto);
     user.setPassword(dto.password, salt);
 
@@ -26,8 +26,11 @@ export class DefaultUserService implements UserService {
   public async findByEmail(email: string): Promise<DocumentType<UserEntity> | null> {
     return this.userModel.findOne({email});
   }
+  public async findById(id: string): Promise<DocumentType<UserEntity> | null> {
+    return this.userModel.findById(id);
+  }
 
-  public async findOrCreate(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>> {
+  public async findOrCreate(dto: UserDto, salt: string): Promise<DocumentType<UserEntity>> {
     const existedUser = await this.findByEmail(dto.email);
 
     if (existedUser) {
