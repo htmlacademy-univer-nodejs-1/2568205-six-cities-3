@@ -3,6 +3,7 @@ import { UserEntity } from '../user/user.entity.js';
 import { City } from '../city.enum.js';
 import { AccomodationType } from '../accomodation_type.enum.js';
 import { Facility } from '../facility.enum.js';
+import { Coordinates } from './coordinates.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface OfferEntity extends defaultClasses.Base {}
@@ -52,16 +53,18 @@ export class OfferEntity extends defaultClasses.TimeStamps {
  @prop()
  public guestsCount!:number
  @prop()
- public salary!:number
+ public cost!:number
  @prop(
   {
    type: () => [String],
    enum: Facility
   })
   public facility!:Facility;
+@prop({required: true})
+public coordinates!: Coordinates
 
-
-
+@prop({default: 0})
+public commentCount!: number;
 
   @prop({
     ref: UserEntity,

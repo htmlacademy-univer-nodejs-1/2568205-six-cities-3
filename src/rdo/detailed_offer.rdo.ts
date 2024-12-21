@@ -29,7 +29,7 @@ export class DetailedOfferRdo {
   @Expose()
   public guestsCount!:number;
   @Expose()
-  public salary!:number;
+  public cost!:number;
   @Expose()
   public facility!:Facility;
   @Expose()

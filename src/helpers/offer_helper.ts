@@ -19,8 +19,10 @@ export function createOffer(offerData: string): Offer {
     accomodationType,
     roomsCount,
     guestsCount,
-    salary,
+    cost,
     facility,
+    lattitude,
+    longitude,
     username,
     email,
     password,
@@ -49,8 +51,12 @@ export function createOffer(offerData: string): Offer {
     accomodationType: accomodationType as unknown as AccomodationType,
     roomsCount: Number.parseInt(roomsCount, 10),
     guestsCount: Number.parseInt(guestsCount, 10),
-    salary: Number.parseInt(salary, 10),
+    cost: Number.parseInt(cost, 10),
     facility: facility as unknown as Facility,
+    coordinates:  {
+      latitude: Number.parseFloat(lattitude),
+      longitude: Number.parseFloat(longitude)
+    },
     user: {
       name: username,
       password,

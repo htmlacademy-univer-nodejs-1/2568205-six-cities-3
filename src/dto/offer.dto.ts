@@ -16,7 +16,7 @@ export class OfferDto {
     public type: AccomodationType,
     public roomsCount:number,
     public guestsCount:number,
-    public salary:number,
+    public cost:number,
     public facility:Facility,
     public userId: string
   ) {}
