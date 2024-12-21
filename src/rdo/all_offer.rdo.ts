@@ -10,7 +10,7 @@ export class AllOfferRDO
   @Expose()
   public city!: string;
   @Expose()
-  public salary!: number;
+  public cost!: number;
   @Expose()
   public type!: string;
   @Expose()

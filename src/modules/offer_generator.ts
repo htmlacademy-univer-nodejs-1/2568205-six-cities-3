@@ -34,7 +34,7 @@ export class OfferGenerator implements Generator<Offer> {
 
     const facility = getRandomEnumValue(Facility) as Facility
     const accomodationType = getRandomEnumValue(AccomodationType) as AccomodationType
-    const salary = generateRandomValue(500, 2000);
+    const cost = generateRandomValue(500, 2000);
     const rooms = generateRandomValue(1, 5);
     const rating = generateRandomValue(1, 5);
 
@@ -47,7 +47,11 @@ export class OfferGenerator implements Generator<Offer> {
       .subtract(generateRandomValue(1, 7), 'day').toDate()
     const avatar = getRandomItem(this.mockData.avatars);
     const type = getRandomEnumValue(UserType) as UserType
-    return { name, description, publicationDate: createdDate, city, previewUrl: preview, photoUrls: photos, isPremium, isFavourite, rating, accomodationType, roomsCount: rooms, salary, guestsCount: guests, facility, user: { name: author, email, password, avatar, type: type } }
+    const longitude = generateRandomValue(1, 100)
+    const latitude = generateRandomValue(1, 100)
+    const coordinates = {longitude, latitude}
+
+    return { name, description, publicationDate: createdDate, city, previewUrl: preview, photoUrls: photos, isPremium, isFavourite, rating, accomodationType, roomsCount: rooms, cost, guestsCount: guests, facility, coordinates, user: { name: author, email, password, avatar, type: type } }
 
   }
 }

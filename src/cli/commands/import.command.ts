@@ -71,8 +71,9 @@ export class ImportCommand implements Command {
       type: offer.accomodationType,
       roomsCount: offer.roomsCount,
       guestsCount:offer.guestsCount,
-      salary: offer.salary,
-      facility: offer.facility
+      cost: offer.cost,
+      facility: offer.facility,
+      coordinates: offer.coordinates
     });
     console.log('Сохранено')
     }

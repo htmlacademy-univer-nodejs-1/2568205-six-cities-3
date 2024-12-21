@@ -53,24 +53,15 @@ export class DefaultOfferService implements OfferService {
  }
  public async findAll(limit: number): Promise<DocumentType<OfferEntity>[]> {
   return this.offerModel
-    .aggregate([
-      {
-        $lookup: {
-          from: 'comments',
-          let: { commentId: '$_id'},
-          pipeline: [
-            { $match: { $expr: { $in: ['$$commentId', '$comments'] } } },
-            { $project: { _id: 1}}
-          ],
-          as: 'comments'
-        },
-      },
-      { $addFields:
-          { id: { $toString: '$_id'}, commentCount: { $size: '$comments'} }
-      },
-      { $unset: 'comments' },
-      { $limit: limit },
-      { $sort: { offerCount: SortType.Down } }
-    ]).exec();
+    .find()
+    .sort({offerCount: SortType.Down})
+    .limit(limit)
+    .exec();
+}
+public async incCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+  return this.offerModel
+    .findByIdAndUpdate(offerId, {'$inc': {
+      commentCount: 1,
+    }}).exec();
 }
 }

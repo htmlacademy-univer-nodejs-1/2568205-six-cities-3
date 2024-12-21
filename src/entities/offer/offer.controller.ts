@@ -14,6 +14,8 @@ import { FavouriteOfferDto } from "../../dto/favourite_offer.to.js";
 import { UserService } from "../../service/user.service.interface.js";
 import { DetailedOfferRdo } from "../../rdo/detailed_offer.rdo.js";
 import { OfferDto } from "../../dto/offer.dto.js";
+import { ValidateObjectIdMiddleware } from "../../modules/rest/middleware/validate_object.middleware.js";
+import { ValidateDtoMiddleware } from "../../modules/rest/middleware/validate_dto.middleware.js";
 
 export class OfferController extends BaseController
 {
@@ -24,13 +26,13 @@ export class OfferController extends BaseController
   ) {
     super(logger)
 
-    this.logger.info('Register routes for CategoryController…');
+    this.logger.info('Register routes for OfferController…');
 
     this.addRoute({ path: '/', method: HttpMethod.Get, handler: this.index });
-    this.addRoute({ path: '/', method: HttpMethod.Post, handler: this.create });
-    this.addRoute({ path: '/:id', method: HttpMethod.Get, handler: this.detailedOffer });
-    this.addRoute({ path: '/:id', method: HttpMethod.Delete, handler: this.deleteOffer });
-    this.addRoute({ path: '/:id', method: HttpMethod.Put, handler: this.updateOffer });
+    this.addRoute({ path: '/', method: HttpMethod.Post, handler: this.create, middlewares: [new ValidateDtoMiddleware(CreateOfferDto)] });
+    this.addRoute({ path: '/:id', method: HttpMethod.Get, handler: this.detailedOffer, middlewares: [new ValidateObjectIdMiddleware('id')] });
+    this.addRoute({ path: '/:id', method: HttpMethod.Delete, handler: this.deleteOffer, middlewares: [new ValidateObjectIdMiddleware('id')] });
+    this.addRoute({ path: '/:id', method: HttpMethod.Put, handler: this.updateOffer, middlewares: [new ValidateObjectIdMiddleware('id'), new ValidateDtoMiddleware(CreateOfferDto)] });
     this.addRoute({path: '/favourites/add', method: HttpMethod.Post, handler: this.addToFavourite})
     this.addRoute({path: '/favourites/:city', method: HttpMethod.Get, handler: this.findFavouriteFromCity})
 

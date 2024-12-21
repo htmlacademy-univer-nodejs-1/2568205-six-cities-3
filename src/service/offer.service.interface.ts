@@ -13,4 +13,5 @@ export interface OfferService {
   delete(offerId:string): Promise<DocumentType<OfferEntity> | null>
   updateById(id: string, offerDto: OfferDto): Promise<DocumentType<OfferEntity> | null>
   findPremiumByCity(city: string): Promise<DocumentType<OfferEntity>[]>
+  incCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null>
 }

@@ -19,6 +19,7 @@ export class RestApplication {
     @inject(Component.DatabaseClient) private readonly databaseClient: DatabaseClient,
     @inject(Component.OfferController) private readonly offerController: Controller,
     @inject(Component.UserController) private readonly userController:Controller,
+    @inject(Component.CommentsController) private readonly commentsController:Controller,
     @inject(Component.ExceptionFilter) private readonly exceptionFilter: ExceptionFilter
   ) {
     this.server = express()
@@ -41,6 +42,7 @@ export class RestApplication {
   private async _initControllers() {
     this.server.use('/offers', this.offerController.router)
     this.server.use('/users', this.userController.router)
+    this.server.use('/comments', this.commentsController.router)
   }
   private async _initMiddleware() {
     this.server.use(express.json());

@@ -13,6 +13,9 @@ import { Request, Response } from "express";
 import { UserRdo } from "../../rdo/user_rdo.js";
 import { LoginUserRequest } from "./login_user_request.js";
 import { HttpError } from "../../modules/rest/errors/http_error.js";
+import { ValidateDtoMiddleware } from "../../modules/rest/middleware/validate_dto.middleware.js";
+import { UserDto } from "../../dto/user.dto.js";
+import { LoginUserDto } from "../../dto/login_user.dto.js";
 
 @injectable()
 export class UserController extends BaseController {
@@ -24,8 +27,8 @@ export class UserController extends BaseController {
     super(logger);
     this.logger.info('Register routes for UserController…');
 
-    this.addRoute({ path: '/register', method: HttpMethod.Post, handler: this.create });
-    this.addRoute({ path: '/login', method: HttpMethod.Post, handler: this.login });
+    this.addRoute({ path: '/register', method: HttpMethod.Post, handler: this.create, middlewares: [new ValidateDtoMiddleware(UserDto)] });
+    this.addRoute({ path: '/login', method: HttpMethod.Post, handler: this.login, middlewares: [new ValidateDtoMiddleware(LoginUserDto)] });
   }
 
   public async create(
