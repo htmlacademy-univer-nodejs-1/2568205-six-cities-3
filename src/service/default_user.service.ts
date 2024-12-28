@@ -12,6 +12,10 @@ export class DefaultUserService implements UserService {
     @inject(Component.Logger) private readonly logger: Logger,
     @inject(Component.UserModel) private readonly userModel: types.ModelType<UserEntity>
   ) {}
+ public async exists(documentId: string): Promise<boolean> {
+    const exists = await this.userModel.exists({_id: documentId})!==null;
+    return exists
+  }
 
   public async create(dto: UserDto, salt: string): Promise<DocumentType<UserEntity>> {
     const user = new UserEntity(dto);
