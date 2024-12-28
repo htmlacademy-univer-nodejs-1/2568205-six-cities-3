@@ -16,6 +16,7 @@ import { DetailedOfferRdo } from "../../rdo/detailed_offer.rdo.js";
 import { OfferDto } from "../../dto/offer.dto.js";
 import { ValidateObjectIdMiddleware } from "../../modules/rest/middleware/validate_object.middleware.js";
 import { ValidateDtoMiddleware } from "../../modules/rest/middleware/validate_dto.middleware.js";
+import { DocumentExistsMiddleware } from "../../modules/rest/middleware/document_exists.middleware.js";
 
 export class OfferController extends BaseController
 {
@@ -27,12 +28,12 @@ export class OfferController extends BaseController
     super(logger)
 
     this.logger.info('Register routes for OfferController…');
-
+const checkExist = new DocumentExistsMiddleware(offerService, 'Offer', 'id');
     this.addRoute({ path: '/', method: HttpMethod.Get, handler: this.index });
     this.addRoute({ path: '/', method: HttpMethod.Post, handler: this.create, middlewares: [new ValidateDtoMiddleware(CreateOfferDto)] });
-    this.addRoute({ path: '/:id', method: HttpMethod.Get, handler: this.detailedOffer, middlewares: [new ValidateObjectIdMiddleware('id')] });
-    this.addRoute({ path: '/:id', method: HttpMethod.Delete, handler: this.deleteOffer, middlewares: [new ValidateObjectIdMiddleware('id')] });
-    this.addRoute({ path: '/:id', method: HttpMethod.Put, handler: this.updateOffer, middlewares: [new ValidateObjectIdMiddleware('id'), new ValidateDtoMiddleware(CreateOfferDto)] });
+    this.addRoute({ path: '/:id', method: HttpMethod.Get, handler: this.detailedOffer, middlewares: [new ValidateObjectIdMiddleware('id'), checkExist] });
+    this.addRoute({ path: '/:id', method: HttpMethod.Delete, handler: this.deleteOffer, middlewares: [new ValidateObjectIdMiddleware('id'), checkExist] });
+    this.addRoute({ path: '/:id', method: HttpMethod.Put, handler: this.updateOffer, middlewares: [new ValidateObjectIdMiddleware('id'), new ValidateDtoMiddleware(CreateOfferDto), checkExist] });
     this.addRoute({path: '/favourites/add', method: HttpMethod.Post, handler: this.addToFavourite})
     this.addRoute({path: '/favourites/:city', method: HttpMethod.Get, handler: this.findFavouriteFromCity})
 
@@ -67,7 +68,7 @@ export class OfferController extends BaseController
         return this.logger.error(offerDoesNotExist.message, offerDoesNotExist)
       }
       if (!user) {
-        const userDoesNotExist = new Error("Данного оффера не существует")
+        const userDoesNotExist = new Error("Данного пользователя не существует")
         this.send(res, StatusCodes.BAD_REQUEST, userDoesNotExist.message)
         return this.logger.error(userDoesNotExist.message, userDoesNotExist)
       }
