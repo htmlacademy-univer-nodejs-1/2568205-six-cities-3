@@ -17,6 +17,7 @@ import { OfferDto } from "../../dto/offer.dto.js";
 import { ValidateObjectIdMiddleware } from "../../modules/rest/middleware/validate_object.middleware.js";
 import { ValidateDtoMiddleware } from "../../modules/rest/middleware/validate_dto.middleware.js";
 import { DocumentExistsMiddleware } from "../../modules/rest/middleware/document_exists.middleware.js";
+import { PrivateRouteMiddleware } from "../../modules/rest/middleware/private_route.middleware.js";
 
 export class OfferController extends BaseController
 {
@@ -30,11 +31,12 @@ export class OfferController extends BaseController
     this.logger.info('Register routes for OfferController…');
 const checkExist = new DocumentExistsMiddleware(offerService, 'Offer', 'id');
     this.addRoute({ path: '/', method: HttpMethod.Get, handler: this.index });
-    this.addRoute({ path: '/', method: HttpMethod.Post, handler: this.create, middlewares: [new ValidateDtoMiddleware(CreateOfferDto)] });
-    this.addRoute({ path: '/:id', method: HttpMethod.Get, handler: this.detailedOffer, middlewares: [new ValidateObjectIdMiddleware('id'), checkExist] });
-    this.addRoute({ path: '/:id', method: HttpMethod.Delete, handler: this.deleteOffer, middlewares: [new ValidateObjectIdMiddleware('id'), checkExist] });
-    this.addRoute({ path: '/:id', method: HttpMethod.Put, handler: this.updateOffer, middlewares: [new ValidateObjectIdMiddleware('id'), new ValidateDtoMiddleware(CreateOfferDto), checkExist] });
-    this.addRoute({path: '/favourites/add', method: HttpMethod.Post, handler: this.addToFavourite})
+    this.addRoute({ path: '/', method: HttpMethod.Post, handler: this.create, middlewares: [new PrivateRouteMiddleware(), new ValidateDtoMiddleware(CreateOfferDto)] });
+    this.addRoute({ path: '/:id', method: HttpMethod.Get, handler: this.detailedOffer, middlewares: [new PrivateRouteMiddleware(), new ValidateObjectIdMiddleware('id'), checkExist] });
+    this.addRoute({ path: '/:id', method: HttpMethod.Delete, handler: this.deleteOffer, middlewares: [new PrivateRouteMiddleware(), new ValidateObjectIdMiddleware('id'), checkExist] });
+    this.addRoute({ path: '/:id', method: HttpMethod.Put, handler: this.updateOffer, middlewares: [new PrivateRouteMiddleware(), new ValidateObjectIdMiddleware('id'), new ValidateDtoMiddleware(CreateOfferDto), checkExist] });
+    this.addRoute({path: '/favourites/add', method: HttpMethod.Post, handler: this.addToFavourite, middlewares:[new PrivateRouteMiddleware()]})
+    this.addRoute({path: '/favourites/remove', method: HttpMethod.Post, handler: this.removeFromFavourite, middlewares: [new PrivateRouteMiddleware()] })
     this.addRoute({path: '/favourites/:city', method: HttpMethod.Get, handler: this.findFavouriteFromCity})
 
   }
@@ -57,22 +59,26 @@ const checkExist = new DocumentExistsMiddleware(offerService, 'Offer', 'id');
     const result = await this.offerService.create(body);
     this.created(res, fillDTO(AllOfferRDO, result));
   }
-  public async addToFavourite({ body }: Request<Record<string, unknown>, Record<string, unknown>, FavouriteOfferDto>,
+  public async addToFavourite({ body, tokenPayload }: Request<Record<string, unknown>, Record<string, unknown>, FavouriteOfferDto>,
     res: Response) {
       const offer = await this.offerService.findById(body.id)
-      const user = await this.userService.findById(body.userId)
+      const user = await this.userService.findById(tokenPayload.id)
       if (!offer)
       {
         const offerDoesNotExist = new Error("Данного оффера не существует")
         this.send(res, StatusCodes.BAD_REQUEST, offerDoesNotExist.message)
         return this.logger.error(offerDoesNotExist.message, offerDoesNotExist)
       }
-      if (!user) {
-        const userDoesNotExist = new Error("Данного пользователя не существует")
-        this.send(res, StatusCodes.BAD_REQUEST, userDoesNotExist.message)
-        return this.logger.error(userDoesNotExist.message, userDoesNotExist)
-      }
-      this.offerService.addTofavourite(body.id, body.userId)
+
+      this.offerService.addTofavourite(body.id, tokenPayload.id)
+      this.ok(res, fillDTO(DetailedOfferRdo, offer))
+
+  }
+  public async removeFromFavourite({ body, tokenPayload }: Request<Record<string, unknown>, Record<string, unknown>, FavouriteOfferDto>,
+    res: Response) {
+      const offer = await this.offerService.findById(body.id)
+
+      this.offerService.removeFromFavourite(body.id, tokenPayload.id)
       this.ok(res, {})
 
   }
@@ -81,8 +87,13 @@ const checkExist = new DocumentExistsMiddleware(offerService, 'Offer', 'id');
     const id = req.params['id']
     console.log(id)
       const offer = await this.offerService.findById(id)
-      console.log(offer)
+      const userId = req.tokenPayload.id;
+      console.log(userId)
+      const favouriteOffers = await this.offerService.getFavouritesByUser(userId)
+      const isFavourite = favouriteOffers?.includes(offer!)
+      console.log(favouriteOffers)
       const resposeData =  fillDTO(DetailedOfferRdo, offer)
+      resposeData.isFavoutite = isFavourite!
       console.log()
       this.ok(res, resposeData)
 

@@ -15,4 +15,5 @@ export interface OfferService extends DocumentExists {
   updateById(id: string, offerDto: OfferDto): Promise<DocumentType<OfferEntity> | null>
   findPremiumByCity(city: string): Promise<DocumentType<OfferEntity>[]>
   incCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null>
+  getFavouritesByUser(userId: string): Promise<DocumentType<OfferEntity>[] | null>
 }

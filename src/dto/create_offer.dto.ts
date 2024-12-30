@@ -45,7 +45,6 @@ export class CreateOfferDto {
   @IsEnum(Facility, {message: CreateOfferValidationMessage.facility.invalid})
   facility!: Facility;
   @IsObject({message: CreateOfferValidationMessage.coordinates.invalid})
-  coordinates!: Coordinates
-  @IsMongoId({message: CreateOfferValidationMessage.userId.invalidId})
+  coordinates!: Coordinates;
   userId!: string;
 }

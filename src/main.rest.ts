@@ -19,6 +19,7 @@ import { createRestApplicationContainer } from './rest/rest.container.js';
 import { createUserContainer } from './entities/user/user.container.js';
 import { createOfferContainer } from './entities/offer/offer.container.js';
 import { createCommentContainer } from './entities/comment/comment.container.js';
+import { createAuthContainer } from './modules/auth/auth.container.js';
 
 async function bootstrap() {
 
@@ -27,6 +28,7 @@ async function bootstrap() {
     createUserContainer(),
     createOfferContainer(),
     createCommentContainer(),
+    createAuthContainer()
   );
 
 
