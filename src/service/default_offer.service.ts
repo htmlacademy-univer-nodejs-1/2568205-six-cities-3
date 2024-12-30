@@ -32,14 +32,14 @@ export class DefaultOfferService implements OfferService {
   }
 
   public async addTofavourite(offerId: string, userId: string): Promise<void> {
-    this.offerModel.findByIdAndUpdate(offerId, {$addToSet:{favouritesUsers:userId}}).exec()
+    await this.offerModel.findByIdAndUpdate(offerId, {$addToSet:{favouritesUsers:userId}}).exec()
   }
   public async removeFromFavourite(offerId: string, userId: string): Promise<void> {
-    this.offerModel.findByIdAndUpdate(offerId, {$pull:{favouritesUsers:userId}})
+   await  this.offerModel.findByIdAndUpdate(offerId, {$pull:{favouritesUsers:userId}})
   }
-  public async getFavouritesByUser(userId: string)
+  public async getFavouritesByUser(userId: string): Promise<DocumentType<OfferEntity>[] | null>
   {
-    return this.offerModel.find({favouritesUsers:userId}).exec()
+    return await this.offerModel.find({favouritesUsers:userId}).exec()
   }
   public async delete(offerId: string): Promise<DocumentType<OfferEntity> | null> {
     let offer = await  this.offerModel.findByIdAndDelete(offerId).exec()

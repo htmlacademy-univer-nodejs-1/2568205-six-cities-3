@@ -13,6 +13,8 @@ import { CreateCommentDto } from "../../dto/create_comment.dto.js";
 import { HttpMethod } from "../../modules/rest/types/http_method.enum.js";
 import { ValidateDtoMiddleware } from "../../modules/rest/middleware/validate_dto.middleware.js";
 import { ValidateObjectIdMiddleware } from "../../modules/rest/middleware/validate_object.middleware.js";
+import { DocumentExistsMiddleware } from "../../modules/rest/middleware/document_exists.middleware.js";
+import { ParseTokenMiddleware } from "../../modules/rest/middleware/parse_token_middleware.js";
 
 export class CommentsController extends BaseController
 
@@ -24,22 +26,17 @@ export class CommentsController extends BaseController
   ){
     super(logger)
     this.addRoute({path: '/', method: HttpMethod.Post, handler: this.create, middlewares: [new ValidateDtoMiddleware(CreateCommentDto)]})
-    this.addRoute({path: '/:offerId', method: HttpMethod.Get, handler: this.getComments, middlewares: [new ValidateObjectIdMiddleware('offerId')]})
+    this.addRoute({path: '/:offerId', method: HttpMethod.Get, handler: this.getComments, middlewares: [new ValidateObjectIdMiddleware('offerId'), new DocumentExistsMiddleware(offerService, 'Offer', 'offerId' )]})
   }
   public async getComments( req:Request, res: Response): Promise<void> {
-    if (!await this.offerService.findById(req.params.offerId)) {
-      throw new HttpError(
-        StatusCodes.NOT_FOUND,
-        `Offer with id ${req.params.offerId} not found.`,
-        'OfferController'
-      );
-    }
+
+
 
     const comments = await this.commentService.findByOfferId(req.params.offerId);
     this.ok(res, fillDTO(CommentRdo, comments));
   }
   public async create(
-    { body }: Request<Record<string, unknown>, Record<string, unknown>, CreateCommentDto>,
+    { body, tokenPayload }: Request<Record<string, unknown>, Record<string, unknown>, CreateCommentDto>,
     res: Response
   ): Promise<void> {
 
@@ -51,7 +48,7 @@ export class CommentsController extends BaseController
       );
     }
 
-    const comment = await this.commentService.create(body);
+    const comment = await this.commentService.create({...body, userId: tokenPayload.id} );
     await this.offerService.incCommentCount(body.offerId);
     this.created(res, fillDTO(CommentRdo, comment));
   }
